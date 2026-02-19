@@ -9,7 +9,7 @@ release:
 		yq eval '.metadata.labels["everest.percona.com/version"] = "$(VERSION)"' $$crd -i; \
 	done
 
-EVEREST_REPO_URL ?= https://github.com/percona/everest-operator
+EVEREST_REPO_URL ?= https://github.com/openeverest/openeverest-operator
 CRD_DIR ?= config/crd
 CRD_VERSION ?= main
 CRD_SUBCHART_DIR ?= $(PWD)

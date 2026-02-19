@@ -1,4 +1,4 @@
-# Using Everest Helm Chart with ArgoCD
+# Using OpenEverest Helm Chart with ArgoCD
 
 ## Overview
 Everest can be installed and managed using ArgoCD, but there are specific configurations you must apply to avoid common pitfalls.
@@ -11,11 +11,11 @@ Since ArgoCD rerenders templates on every sync, these values will change, leadin
 To resolve this, you need to include these resources in the `spec.ignoreDifferences` fields (see example below).
 * The `everest-accounts` Secret might be managed externally (e.g., via `everestctl`).
 To prevent ArgoCD from overwriting changes applied externally, include this Secret in the `spec.ignoreDifferences` field.
-* During chart upgrades, Everest uses a `pre-upgrade` hook to verify some prerequisites.
+* During chart upgrades, OpenEverest uses a `pre-upgrade` hook to verify some prerequisites.
 ArgoCD treats this as a `PreSync` hook, causing upgrade checks to run on every sync, which will eventually fail.
 To avoid this, disable the upgrade checks by setting `upgrade.preflightChecks=false`.
 Note that disabling these checks means safe upgrades cannot be guaranteed when using ArgoCD.
-* It is recommended to deploy the database namespaces separately from the core Everest application.
+* It is recommended to deploy the database namespaces separately from the core OpenEverest application.
 To achieve this, set `dbNamespaces.enabled=false` in your chart values and deploy the database namespaces as a separate `Application`.
 
 #### Recommended configuration example:
@@ -116,7 +116,7 @@ spec:
   project: default
   source:
     chart: everest-db-namespace
-    repoURL: https://percona.github.io/percona-helm-charts/
+    repoURL: https://openeverest.github.io/helm-charts/
     targetRevision: 1.3.0
   syncPolicy:
     syncOptions:

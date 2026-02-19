@@ -63,7 +63,7 @@ spec:
         value: "false"
       - name: upgrade.preflightChecks
         value: "false"
-    repoURL: https://percona.github.io/percona-helm-charts/
+    repoURL: https://openeverest.github.io/helm-charts/
     targetRevision: 1.3.0
   syncPolicy:
     syncOptions:

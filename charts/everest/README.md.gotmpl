@@ -1,31 +1,32 @@
-# Percona Everest
+# OpenEverest
 
-This helm chart deploys Percona Everest.
+This helm chart deploys OpenEverest.
 
 Useful links:
-- [Percona Everest Documentation](https://docs.percona.com/everest/index.html)
-- [Percona Everest GitHub](https://github.com/percona/everest)
+- [OpenEverest website](https://openeverest.io)
+- [OpenEverest Documentation](https://openeverest.io/documentation/current)
+- [OpenEverest GitHub](https://github.com/openeverest/openeverest)
 - [Deploying with ArgoCD](./docs/argocd.md)
 - [Installing on OpenShift](./docs/openshift.md)
 
 ## Usage
 
-### 1. Add the Percona Helm repository
+### 1. Add the Helm repository
 
 ```sh
-helm repo add percona https://percona.github.io/percona-helm-charts/
+helm repo add openeverest https://openeverest.github.io/helm-charts/
 helm repo update
 ```
 
 ### 2. Install Everest
 ```sh
-helm install everest-core percona/everest \
+helm install everest-core openeverest/everest \
     --namespace everest-system \
     --create-namespace
 ```
 
 Notes:
-* This command deploys the Everest components in the `everest-system` namespace. Currently, we do not support specifying a different namespace for Everest.
+* This command deploys the OpenEverest components in the `everest-system` namespace. Currently, we do not support specifying a different namespace for Everest.
 * Additionally, it also deploys a new namespace called `everest` for your databases and the database operators.
 * If you prefer to manage your database namespace separately, you may set `dbNamespace.enabled=false`.
 * You may override the name of the database namespace using the `dbNamespace.namespaceOverride` parameter.
@@ -39,25 +40,25 @@ Once the installation is complete, you may retrieve the admin credentials using 
 kubectl get secret everest-accounts -n everest-system -o jsonpath='{.data.users\.yaml}' | base64 --decode  | yq '.admin.passwordHash'
 ```
 
-You may open the Everest UI by port-forwarding the service to your local machine:
+You may open the OpenEverest UI by port-forwarding the service to your local machine:
 
 ```sh
 kubectl port-forward svc/everest -n everest-system 8080:8080
 ```
 
 Notes:
-* The default username to login to the Everest UI is `admin`.
+* The default username to login to the OpenEverest UI is `admin`.
 * You may specify a different default admin password using `server.initialAdminPassword` parameter during installation.
 * The default admin password is stored in plain text. It is highly recommended to update the password using `everestctl` to ensure that the passwords are hashed.
 
 ### 4. Deploy additional database namespaces
 
-After Everest is successfully running, you may create additional database namespaces using the `everest-db-namespace` Helm chart.
+After OpenEverest is successfully running, you may create additional database namespaces using the `everest-db-namespace` Helm chart.
 If you had set `dbNamespaces.enabled=false` in the previous step, you may deploy a database namespaces using the following command:
 
 ```sh
 helm install everest \
-    percona/everest-db-namespace \
+    openeverest/everest-db-namespace \
     --create-namespace \
     --namespace everest
 ```
@@ -72,7 +73,7 @@ If you have an existing database namespace and would like to deploy additional o
 
 ```sh
 helm upgrade everest \
-    percona/everest-db-namespace \
+    openeverest/everest-db-namespace \
     --namespace [NAMESPACE]
     --pxc=true \
     --postgresql=true
@@ -113,7 +114,7 @@ As of Helm v3, CRDs are not automatically updated during a Helm upgrade. You mus
 ```sh
 helm repo update
 helm upgrade --install everest-crds \
-    percona/everest-crds \
+    openeverest/everest-crds \
     --namespace everest-system \
     --take-ownership
 ```
@@ -127,7 +128,7 @@ helm upgrade --install everest-crds \
 > annotation validation error: missing key "meta.helm.sh/release-namespace": must be set to "everest-system"
 > ```
 >
-> If you must use a Helm version older than `3.17.0`, you can manually simulate the behavior of `--take-ownership` by adding the required labels and annotations to the Everest CRDs:
+> If you must use a Helm version older than `3.17.0`, you can manually simulate the behavior of `--take-ownership` by adding the required labels and annotations to the OpenEverest CRDs:
 >
 > ```sh
 > CRDS=(databaseclusters.everest.percona.com databaseengines.everest.percona.com databaseclusterbackups.everest.percona.com databaseclusterrestores.everest.percona.com backupstorages.everest.percona.com monitoringconfigs.everest.percona.com)
@@ -142,12 +143,12 @@ helm upgrade --install everest-crds \
 
 Upgrade the Helm release for Everest (core components):
 ```sh
-helm upgrade everest-core percona/everest --namespace everest-system --version $(VERSION)
+helm upgrade everest-core openeverest/everest --namespace everest-system --version $(VERSION)
 ```
 
 Upgrade the Helm release for the database namespace (if applicable):
 ```sh
-helm upgrade everest percona/everest-db-namespace --namespace [DB NAMESPACE] --version $(VERSION)
+helm upgrade everest openeverest/everest-db-namespace --namespace [DB NAMESPACE] --version $(VERSION)
 ```
 
 Notes:
@@ -161,7 +162,7 @@ However, in doing so, a safe upgrade cannot be guaranteed.
 
 ## Configuration
 
-The following table shows the configurable parameters of the Percona Everest chart and their default values.
+The following table shows the configurable parameters of the OpenEverest chart and their default values.
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -170,15 +171,15 @@ The following table shows the configurable parameters of the Percona Everest cha
 {{- end }}
 
 ## Notice for developers
-In case you made any changes in `percona-helm-charts/charts/everest/charts/common` or `percona-helm-charts/charts/everest/charts/everest-db-namespace` directories,
+In case you made any changes in `helm-charts/charts/everest/charts/common` or `helm-charts/charts/everest/charts/everest-db-namespace` directories,
 please make sure you perform the following actions before creating PR:
-- bump chart version in `percona-helm-charts/charts/everest/charts/common/Chart.yaml` or `percona-helm-charts/charts/everest/charts/everest-db-namespace/Chart.yaml` accordingly in `version` parameter.
-- in `percona-helm-charts/charts/everest` directory run:
+- bump chart version in `helm-charts/charts/everest/charts/common/Chart.yaml` or `helm-charts/charts/everest/charts/everest-db-namespace/Chart.yaml` accordingly in `version` parameter.
+- in `helm-charts/charts/everest` directory run:
     ```bash
     make prepare-pr
     ```
 
-In case you need to update the Everest Custom Resource Definitions (CRDs) after the changes in `github.com/percona/everest-operator` repository, please run the following command:
+In case you need to update the OpenEverest Custom Resource Definitions (CRDs) after the changes in `github.com/openeverest/openeverest-operator` repository, please run the following command:
 ```bash
-CRD_VERSION=<branch name in percona/everest-operator repo> make prepare-pr
+CRD_VERSION=<branch name in openeverest/openeverest-operator repo> make prepare-pr
 ```

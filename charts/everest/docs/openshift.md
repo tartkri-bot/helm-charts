@@ -1,15 +1,15 @@
-# Installing Percona Everest on OpenShift
+# Installing OpenEverest on OpenShift
 
-The Percona Everest Helm chart can be installed on OpenShift with some additional configuration steps.
+The OpenEverest Helm chart can be installed on OpenShift with some additional configuration steps.
 
-> Note: Support for OpenShift is currently in progress, so it may not work as expected. If you encounter any issues, please report them by creating a new issue [here](https://github.com/percona/everest/issues/new).
+> Note: Support for OpenShift is currently in progress, so it may not work as expected. If you encounter any issues, please report them by creating a new issue [here](https://github.com/openeverest/openeverest) or contact us via other [community channels](https://openeverest.io/#community).
 
 ## 1. Install Everest
 
 Run the following command to install Everest with OpenShift compatibility enabled:
 
 ```sh
-helm install everest-core percona/everest \
+helm install everest-core openeverest/everest \
     --namespace everest-system \
     --create-namespace \
     --set compatibility.openshift=true \
@@ -48,7 +48,7 @@ If you need to add database namespaces, run the following command with OpenShift
 
 ```
 helm install everest \
-    percona/everest-db-namespace \
+    openeverest/everest-db-namespace \
     --create-namespace \
     --namespace everest \
     --set compatibility.openshift=true

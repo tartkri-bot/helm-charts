@@ -1,3 +1,12 @@
+                                                                         
+  ▄▄▄▄▄                      ▄▄▄▄▄▄▄                                     
+▄███████▄                   ███▀▀▀▀▀                                ██   
+███   ███ ████▄ ▄█▀█▄ ████▄ ███▄▄    ██ ██ ▄█▀█▄ ████▄ ▄█▀█▄ ▄█▀▀▀ ▀██▀▀ 
+███▄▄▄███ ██ ██ ██▄█▀ ██ ██ ███      ██▄██ ██▄█▀ ██ ▀▀ ██▄█▀ ▀███▄  ██   
+ ▀█████▀  ████▀ ▀█▄▄▄ ██ ██ ▀███████  ▀█▀  ▀█▄▄▄ ██    ▀█▄▄▄ ▄▄▄█▀  ██   
+          ██                                                                                                      
+          ▀▀                                             openeverest.io                                                     
+
 {{- if .Release.IsInstall }}
 {{- $pfSrcPort := "8080" }}
 {{- $pfDstPort := "8080" }}
@@ -9,7 +18,7 @@
 {{- end }}
 {{- $pfCmd := printf "kubectl port-forward svc/%s %s:%s -n %s" .Values.server.service.name $pfSrcPort $pfDstPort .Release.Namespace }}
 {{- $pfUrl := printf "%s://localhost:%s" $pfUrlProto $pfSrcPort }}
-Thank you for installing Everest (v{{ .Chart.AppVersion }})!
+Thank you for installing OpenEverest (v{{ .Chart.AppVersion }})!
 
 Follow the steps below to get started:
 {{ if not .Values.dbNamespace.enabled }}
@@ -18,7 +27,7 @@ PROVISION A NAMESPACE FOR YOUR DATABASES
 
 Install a namespace for your databases using the following command:
 
-    helm install everest percona/everest-db-namespace --namespace everest --create-namespace
+    helm install everest openeverest/everest-db-namespace --namespace everest --create-namespace
 
 {{- end }}
 
@@ -33,7 +42,7 @@ Run the following command to fetch the initial admin password:
 
     everestctl accounts set-password -u admin
 
-ACCESS THE EVEREST UI
+ACCESS THE OPENEVEREST UI
 ======================
 
 To access the web UI, set up port-forwarding and visit {{ $pfUrl }} in your browser:
@@ -42,6 +51,6 @@ To access the web UI, set up port-forwarding and visit {{ $pfUrl }} in your brow
 {{- end }}
 
 {{- if .Release.IsUpgrade }}
-Everest has been successfully upgraded to version {{ .Chart.AppVersion }}!
+OpenEverest has been successfully upgraded to version {{ .Chart.AppVersion }}!
 {{- end }}
 

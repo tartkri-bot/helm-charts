@@ -68,7 +68,7 @@ link-crds:
 		echo "Linked $$crd → crds/"; \
 	done
 
-EVEREST_REPO_URL ?= https://github.com/percona/everest-operator
+EVEREST_REPO_URL ?= https://github.com/openeverest/openeverest-operator
 CRD_DIR ?= config/crd
 CRD_VERSION ?= main
 .PHONY: crds-gen
