@@ -7,6 +7,7 @@ EVEREST_OPERATOR_IMAGE_NAME ?= openeverest-operator
 EVEREST_CATALOG_IMAGE_NAME ?= openeverest-catalog
 TELEMETRY ?= true
 VERSION ?= 0.0.0
+GH_PAGES_WORKTREE ?= /tmp/helm-gh-pages
 
 .PHONY: prepare-chart
 prepare-chart:
@@ -41,6 +42,18 @@ release-dev: EVEREST_CATALOG_IMAGE_NAME := openeverest-catalog-dev
 release-dev: TELEMETRY=false
 release-dev: release-crds
 release-dev: prepare-chart
+
+.PHONY: publish
+publish:
+	git worktree remove --force $(GH_PAGES_WORKTREE) 2>/dev/null || true
+	git worktree add $(GH_PAGES_WORKTREE) gh-pages
+	$(HELM) package . -d $(GH_PAGES_WORKTREE)
+	$(HELM) repo index $(GH_PAGES_WORKTREE) --merge $(GH_PAGES_WORKTREE)/index.yaml
+	cd $(GH_PAGES_WORKTREE) && git add -A && git commit -m "Release v$(VERSION)" && git push origin gh-pages
+	git worktree remove --force $(GH_PAGES_WORKTREE)
+
+.PHONY: release-and-publish
+release-and-publish: release publish
 
 .PHONY: add-repos
 add-repos:
