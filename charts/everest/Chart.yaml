@@ -1,8 +1,8 @@
 apiVersion: v2
 name: everest
 description: A cloud-native database platform
-version: "0.0.0"
-appVersion: "0.0.0"
+version: "0.0.1"
+appVersion: "1.13.0"
 type: application
 kubeVersion: '>= 1.27.0-0'
 annotations:
@@ -14,6 +14,8 @@ maintainers:
     email: oksana.grishchenko@percona.com
   - name: recharte
     email: diogo.recharte@percona.com
+  - name: spron-in
+    email: sp@solanica.io
 dependencies:
   - name: common
     version: 0.0.*
