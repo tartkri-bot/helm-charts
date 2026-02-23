@@ -4,8 +4,65 @@ entries:
   - annotations:
       helm.sh/release-max-history: "5"
     apiVersion: v2
+    appVersion: 1.13.0
+    created: "2026-02-23T17:29:22.733687+03:00"
+    dependencies:
+    - name: common
+      repository: file://charts/common
+      version: 0.0.*
+    - alias: dbNamespace
+      condition: dbNamespace.enabled
+      name: everest-db-namespace
+      repository: file://charts/everest-db-namespace
+      version: 0.0.0
+    - condition: kube-state-metrics.enabled
+      name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 5.27.0
+    - alias: monitoring
+      condition: monitoring.enabled
+      name: victoria-metrics-operator
+      repository: https://victoriametrics.github.io/helm-charts
+      version: 0.43.0
+    - condition: pmm.enabled
+      name: pmm
+      repository: https://percona.github.io/percona-helm-charts
+      version: 1.3.*
+    - condition: pmm3.enabled
+      name: pmm3
+      repository: file://charts/pmm3
+      version: 0.0.*
+    - condition: everest-crds.enabled
+      name: everest-crds
+      repository: file://charts/everest-crds
+      version: 0.0.0
+    - alias: olm
+      condition: olm.install
+      name: operator-lifecycle-manager
+      repository: https://percona.github.io/operator-lifecycle-manager
+      version: 0.1.*
+    description: A cloud-native database platform
+    digest: e1c65797fa6e35bc8a2d082c84bb4791f893096e7ea6bc7986157cc3e8df9803
+    kubeVersion: '>= 1.27.0-0'
+    maintainers:
+    - email: mayank.shah@percona.com
+      name: mayankshah1607
+    - email: oksana.grishchenko@percona.com
+      name: oksana-grishchenko
+    - email: diogo.recharte@percona.com
+      name: recharte
+    - email: sp@solanica.io
+      name: spron-in
+    name: everest
+    type: application
+    urls:
+    - https://openeverest.github.io/helm-charts/everest-0.0.1.tgz
+    version: 0.0.1
+  - annotations:
+      helm.sh/release-max-history: "5"
+    apiVersion: v2
     appVersion: 0.0.0
-    created: "2026-02-23T16:18:32.615569+03:00"
+    created: "2026-02-23T17:29:22.721244+03:00"
     dependencies:
     - name: common
       repository: file://charts/common
@@ -56,4 +113,4 @@ entries:
     urls:
     - https://openeverest.github.io/helm-charts/everest-0.0.0.tgz
     version: 0.0.0
-generated: "2026-02-23T16:18:32.59895+03:00"
+generated: "2026-02-23T17:29:22.70759+03:00"
