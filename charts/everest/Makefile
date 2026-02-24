@@ -7,21 +7,22 @@ EVEREST_OPERATOR_IMAGE_NAME ?= openeverest-operator
 EVEREST_CATALOG_IMAGE_NAME ?= openeverest-catalog
 TELEMETRY ?= true
 VERSION ?= 0.0.0
+CHART_VERSION ?= $(VERSION)
 GH_PAGES_WORKTREE ?= /tmp/helm-gh-pages
 
 .PHONY: prepare-chart
 prepare-chart:
 	CHART_FILES="Chart.yaml ./charts/everest-db-namespace/Chart.yaml ./charts/everest-crds/Chart.yaml"; \
 	for chart in $$CHART_FILES; do \
-		yq eval -i '.version = "${VERSION}"' $$chart; \
+		yq eval -i '.version = "${CHART_VERSION}"' $$chart; \
 		yq eval -i '.appVersion = "${VERSION}"' $$chart; \
 	done
 	yq eval -i '.server.image = "$(IMAGE_PREFIX)/$(EVEREST_SERVER_IMAGE_NAME)"' values.yaml
 	yq eval -i '.olm.catalogSourceImage = "$(IMAGE_PREFIX)/$(EVEREST_CATALOG_IMAGE_NAME)"' values.yaml
 	yq eval -i '.operator.image = "$(IMAGE_PREFIX)/$(EVEREST_OPERATOR_IMAGE_NAME)"' values.yaml
 	yq eval -i '.telemetry = $(TELEMETRY)' values.yaml
-	yq eval -i '(.dependencies[] | select(.name == "everest-db-namespace")).version = "${VERSION}"' Chart.yaml
-	yq eval -i '(.dependencies[] | select(.name == "everest-crds")).version = "${VERSION}"' Chart.yaml
+	yq eval -i '(.dependencies[] | select(.name == "everest-db-namespace")).version = "${CHART_VERSION}"' Chart.yaml
+	yq eval -i '(.dependencies[] | select(.name == "everest-crds")).version = "${CHART_VERSION}"' Chart.yaml
 	$(MAKE) deps
 	
 
@@ -49,7 +50,7 @@ publish:
 	git worktree add $(GH_PAGES_WORKTREE) gh-pages
 	$(HELM) package . -d $(GH_PAGES_WORKTREE)
 	$(HELM) repo index $(GH_PAGES_WORKTREE) --merge $(GH_PAGES_WORKTREE)/index.yaml
-	cd $(GH_PAGES_WORKTREE) && git add -A && git commit -m "Release v$(VERSION)" && git push origin gh-pages
+	cd $(GH_PAGES_WORKTREE) && git add -A && git commit -m "Release chart v$(CHART_VERSION) (app v$(VERSION))" && git push origin gh-pages
 	git worktree remove --force $(GH_PAGES_WORKTREE)
 
 .PHONY: release-and-publish

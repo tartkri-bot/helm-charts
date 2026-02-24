@@ -1,4 +1,4 @@
-# Contributing to Everest Helm Charts
+# Contributing to OpenEverest Helm Charts
 
 Thank you for contributing! This guide walks you through making changes to the chart and publishing a release.
 
@@ -26,13 +26,13 @@ cd charts/everest
 ```
 helm-charts/
 └── charts/
-    └── everest/               ← main chart (work here)
-        ├── Makefile           ← all automation lives here
-        ├── Chart.yaml         ← chart version & dependencies
-        ├── values.yaml        ← default values
-        ├── templates/         ← Kubernetes manifest templates
+    └── everest/                    ← main chart directory (work here)
+        ├── Makefile                ← all automation lives here
+        ├── Chart.yaml              ← chart name: openeverest, version & dependencies
+        ├── values.yaml             ← default values
+        ├── templates/              ← Kubernetes manifest templates
         └── charts/
-            ├── everest-crds/  ← CRD sub-chart
+            ├── everest-crds/       ← CRD sub-chart
             ├── everest-db-namespace/
             ├── common/
             └── pmm3/
@@ -113,11 +113,11 @@ make release-and-publish VERSION=1.2.3
 ```
 
 This single command:
-1. Stamps `version` and `appVersion` in all three `Chart.yaml` files (`everest`, `everest-crds`, `everest-db-namespace`)
+1. Stamps `version` (= `CHART_VERSION`) and `appVersion` (= `VERSION`) in all three `Chart.yaml` files (`openeverest`, `everest-crds`, `everest-db-namespace`)
 2. Updates image references in `values.yaml`
 3. Re-pins dependency versions in `Chart.yaml`
 4. Runs `helm dependency update`
-5. Packages the chart into a `.tgz`
+5. Packages the chart into a `openeverest-<CHART_VERSION>.tgz`
 6. Regenerates `index.yaml` on the `gh-pages` branch (preserving prior releases)
 7. Commits and pushes `gh-pages`
 
@@ -126,7 +126,7 @@ After pushing, the chart is available within minutes:
 ```bash
 helm repo add openeverest https://openeverest.github.io/helm-charts/
 helm repo update
-helm search repo openeverest/everest
+helm search repo openeverest/openeverest
 ```
 
 ### Step-by-step (if you need to separate the release from the publish)
@@ -143,6 +143,17 @@ git push origin main
 # 3. Publish packaged chart to gh-pages
 make publish VERSION=1.2.3
 ```
+
+### Chart-only bump (minor chart fixes without changing the app version)
+
+When you need to fix something in the chart itself (e.g. a template bug, a label change) without bumping the application version, pass `CHART_VERSION` separately:
+
+```bash
+# Release chart 1.2.4 while keeping appVersion at 1.2.3
+make release-and-publish VERSION=1.2.3 CHART_VERSION=1.2.4
+```
+
+When only `VERSION` is provided, `CHART_VERSION` defaults to the same value (backward-compatible behavior).
 
 ### Dev / pre-release
 
@@ -163,6 +174,7 @@ This does **not** call `publish` — dev builds are not pushed to the public Hel
 | `make deps` | Add Helm repos and update all dependencies |
 | `make prepare-pr` | Sync deps, regenerate docs, refresh CRDs — run before opening a PR |
 | `make release VERSION=x.y.z` | Bump all versions and update images/deps |
+| `make release VERSION=x.y.z CHART_VERSION=x.y.z+1` | Bump chart version independently of app version |
 | `make publish VERSION=x.y.z` | Package chart and push to `gh-pages` |
 | `make release-and-publish VERSION=x.y.z` | `release` + `publish` in one step |
 | `make release-dev VERSION=x.y.z` | Dev release with `-dev` images, telemetry off |
