@@ -5,7 +5,7 @@ entries:
       helm.sh/release-max-history: "5"
     apiVersion: v2
     appVersion: 1.13.0
-    created: "2026-02-24T11:28:03.397693+03:00"
+    created: "2026-02-24T11:29:33.925415+03:00"
     dependencies:
     - name: common
       repository: file://charts/common
@@ -62,7 +62,7 @@ entries:
       helm.sh/release-max-history: "5"
     apiVersion: v2
     appVersion: 1.13.0
-    created: "2026-02-24T11:28:03.385494+03:00"
+    created: "2026-02-24T11:29:33.913213+03:00"
     dependencies:
     - name: common
       repository: file://charts/common
@@ -119,7 +119,7 @@ entries:
       helm.sh/release-max-history: "5"
     apiVersion: v2
     appVersion: 0.0.0
-    created: "2026-02-24T11:28:03.368452+03:00"
+    created: "2026-02-24T11:29:33.901133+03:00"
     dependencies:
     - name: common
       repository: file://charts/common
@@ -175,7 +175,7 @@ entries:
       helm.sh/release-max-history: "5"
     apiVersion: v2
     appVersion: 1.13.0
-    created: "2026-02-24T11:05:39.962299+03:00"
+    created: "2026-02-24T11:29:33.93795+03:00"
     dependencies:
     - name: common
       repository: file://charts/common
@@ -212,7 +212,7 @@ entries:
       repository: https://percona.github.io/operator-lifecycle-manager
       version: 0.1.*
     description: A cloud-native database platform
-    digest: 38a919cfb0387194e0047308f6eefa315c549c716e42ac20baf62e784ab073ca
+    digest: d4bb57471edf804d7c556e5c614f6603ac4ff5cb132346d50a418d8b17011323
     kubeVersion: '>= 1.27.0-0'
     maintainers:
     - email: mayank.shah@percona.com
@@ -228,4 +228,4 @@ entries:
     urls:
     - openeverest-1.13.1.tgz
     version: 1.13.1
-generated: "2026-02-24T11:28:03.353572+03:00"
+generated: "2026-02-24T11:29:33.888373+03:00"
