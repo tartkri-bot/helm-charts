@@ -72,6 +72,13 @@ deps: add-repos
 	$(HELM) dependency update ./charts/everest-db-namespace
 	$(HELM) dependency update ./charts/pmm3
 
+# Like 'deps' but uses the lock file without updating repo indices — fast when .tgz files are cached.
+.PHONY: deps-build
+deps-build: add-repos
+	$(HELM) dependency build .
+	$(HELM) dependency build ./charts/everest-db-namespace
+	$(HELM) dependency build ./charts/pmm3
+
 .PHONY: docs-gen
 docs-gen:
 	docker run --rm -v "$(PWD)/:/helm-docs" -u $(shell id -u) jnorwood/helm-docs:v1.14.2
