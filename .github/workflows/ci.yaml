@@ -64,4 +64,4 @@ jobs:
         run: make -C charts/everest deps-build
 
       - name: Run helm template
-        run: make -C charts/everest template
+        run: make -C charts/everest test
